@@ -1,12 +1,8 @@
-# Use an existing docker image as a base
-FROM alpine
-
-# Download and install a dependency
-
-RUN apk add --update gcc
-RUN apk add --update redis
-
-
-# Tell the image what to do when it starts
-# as a container
-CMD ["redis-server"]
+FROM ruby:2.5
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+RUN mkdir /dockerize-bro
+WORKDIR /dockerize-bro
+COPY Gemfile /dockerize-bro/Gemfile
+COPY Gemfile.lock /dockerize-bro/Gemfile.lock
+RUN bundle install
+COPY . /dockerize-bro
